@@ -13,24 +13,24 @@ sleep(3)
 
 #1 elemento
 #BY ID do campo de colocação do email/nome no linkedin
-Email = linkedin.find_element(By.ID, 'session_key')
+email = linkedin.find_element(By.ID, 'session_key')
 
 #By name do mesmo elemento
-Name = linkedin.find_element(By.NAME, 'session_key')
+name = linkedin.find_element(By.NAME, 'session_key')
 
 #2 elemento
 #By class name do SIGN IN
-Sign = linkedin.find_element(By.CLASS_NAME, 'btn-md')
+sign = linkedin.find_element(By.CLASS_NAME, 'btn-md')
 
 #By LINK_TEXT do mesmo elemento
-Sign1 = linkedin.find_element(By.LINK_TEXT, 'Sign in')
+sign1 = linkedin.find_element(By.LINK_TEXT, 'Sign in')
 
 #3 elemento
 #By PARTIAL_LINK_TEXT do obter a app
-App = linkedin.find_element(By.PARTIAL_LINK_TEXT, 'app')
+app = linkedin.find_element(By.PARTIAL_LINK_TEXT, 'now')
 
 #By TAG_NAME do mesmo elemento
-App1 = linkedin.find_elements(By.TAG_NAME, 'span')
+app1 = linkedin.find_elements(By.TAG_NAME, 'a')
 
 title = linkedin.title
 
