@@ -67,6 +67,14 @@ sleep(1)
 submission = driver.find_element(By.XPATH, '//form/button')
 submission.click()
 
+message = driver.find_element(By.ID, "successMessage").text
+
 sleep(1)
+
+assert "Submission successful!" == message
+
+print(message)
+
+sleep(5)
 
 driver.quit()
