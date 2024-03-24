@@ -3,10 +3,8 @@
 # Fluxo 1
 
 from selenium import webdriver
-from time import sleep
+from time import sleep, time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import pytest
 
 #Função para abrir o site
@@ -103,20 +101,28 @@ def setup():
     yield
     print('End')
 
-#teste 1 login
-def test_login(setup):
-    '''Esta função faz o login com user e password e testa se a página abriu'''
+@pytest.fixture()
+def site_before_test():
+    print("Begin Test")
     site = open_site()
     login(site, 'standard_user', 'secret_sauce')
+    yield site
+    print("End Test")
+    site.quit()
 
+#teste 1 verificar login
+def test_login(setup, site_before_test ):
+    '''Esta função testa se a página abriu, verificando se aparece o titulo "products" que surge após o login'''
     # Testar se o login foi feito com sucesso, pela verificação do icone do carrinho
-    cart = site.find_element(By.CLASS_NAME, 'shopping_cart_link')
 
-#teste 2 login e adicionar 6 produtos
-def test_add_to_cart(setup):
-    '''Esta função faz login e adiciona seis elementos'''
-    site = open_site()
-    login(site, 'standard_user', 'secret_sauce')
+    site = site_before_test
+    products_el = site.find_element(By.CLASS_NAME, 'title')
+    assert 'Products' == products_el.text
+
+#teste 2 adicionar 6 produtos
+def test_add_to_cart(setup, site_before_test):
+    '''Esta função adiciona seis elementos e verifica se os adicionou'''
+    site = site_before_test
 
     add_to_cart(site, 6)
 
@@ -126,37 +132,35 @@ def test_add_to_cart(setup):
     assert badge_verification == 6
 
 #teste 3 clicar no carro e verificar que entrou no carro
-def test_click_on_cart(setup):
-    site = open_site()
-    login(site, 'standard_user', 'secret_sauce')
+def test_click_on_cart(setup, site_before_test):
+    '''Esta função testa o carrinho de compras'''
+    site = site_before_test
 
     add_to_cart(site, 6)
     click_cart(site)
 
     cart_page_title = site.find_element(By.CLASS_NAME, 'title')
+    assert 'Your Cart' == cart_page_title.text
 
-#teste 4 login, adicionar 6 elementos, remover elemento e verificar que ficaram 5 elementos no carro
+#teste 4 adicionar 6 elementos, remover elemento e verificar que ficaram 5 elementos no carro
 
-def test_remove_element(setup):
+def test_remove_element(setup, site_before_test):
     '''Esta função abre o site,adicionar 6 elementos, remove 1 e verifica'''
-    site = open_site()
-    login(site, 'standard_user', 'secret_sauce')
 
+    site = site_before_test
     add_to_cart(site, 6)
     click_cart(site)
     remove_item(site)
     cart_badge = site.find_element(By.CLASS_NAME, 'shopping_cart_badge')
     badge_verification = int(cart_badge.text)
 
-
     assert badge_verification == 5
     
 #Teste Final 5, todos os passos anteriores+checkout+finish
 
-def test_all_cicle(setup):
+def test_all_cicle(setup, site_before_test):
     '''Faz todo o circuito, login+adição de 6 elementos+remoção de 1+ checkout+finish e testa'''
-    site = open_site()
-    login(site, 'standard_user', 'secret_sauce')
+    site = site_before_test
 
     add_to_cart(site, 6)
     sleep(1)
@@ -194,6 +198,7 @@ def test_login_logout(setup):
     sleep(1)
 
     login_el = site.find_element(By.ID, 'login-button')
+    assert 'Login' == login_el.get_attribute('value')
 
 #Fluxo 3 - Fazer login com um utilizador que dá erro
     
@@ -209,10 +214,9 @@ def test_error(setup):
 
 
 #Fluxo 4 - Fazer login, adicionar um item ao carro e fazer reset
-def test_fluxo4(setup):
+def test_fluxo4(setup, site_before_test):
     
-    site = open_site()
-    login(site, 'standard_user', 'secret_sauce')
+    site = site_before_test
 
     add_to_cart(site, 2)
     sleep(1)
@@ -223,6 +227,19 @@ def test_fluxo4(setup):
     badge_verification = int(cart_badge.text)
     assert badge_verification == 1
     
+#Fluxo 5- Verificar o tempo de login num utilizador de performance. 
+#Este user demora cerca de 6 segundos, pelo que o teste deverá falhar
+    
+def test_login_time(setup):
+    
+    site = open_site()
 
+    initial_time = time()
+    login(site, 'performance_glitch_user', 'secret_sauce')
 
+    
+    products_el = site.find_element(By.CLASS_NAME, 'title')
+    assert 'Products' == products_el.text
 
+    final_time = time() - initial_time - 2 # 2 sleeps do login
+    assert final_time <= 2
