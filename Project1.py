@@ -15,6 +15,7 @@ def open_site():
     site.get('https://www.saucedemo.com/')
 
     site.maximize_window()
+    site.implicitly_wait(2)
 
     sleep(2)
     return site
@@ -34,7 +35,12 @@ def login(site, username, password):
     sleep(1)
 
     login_el = site.find_element(By.ID, 'login-button')
+    #No assert a seguir vou verificar se o botão de login é clicável e se é uma tag de input
+    assert login_el.is_enabled() and login_el.tag_name == 'input'
+    # Verificar se o fundo do login é verde
+    assert login_el.value_of_css_property('background-color') == 'rgba(61, 220, 145, 1)'
     login_el.click()
+    
 
 #Função para fazer logout
 
@@ -117,10 +123,12 @@ def test_login(setup, site_before_test ):
 
     site = site_before_test
     products_el = site.find_element(By.CLASS_NAME, 'title')
-    assert 'Products' == products_el.text
+    #Verifico se o elemento está na página e se é visivel
+    assert 'Products' == products_el.text and products_el.is_displayed()
+
 
 #teste 2 adicionar 6 produtos
-def test_add_to_cart(setup, site_before_test):
+def mtest_add_to_cart(setup, site_before_test):
     '''Esta função adiciona seis elementos e verifica se os adicionou'''
     site = site_before_test
 
@@ -132,7 +140,7 @@ def test_add_to_cart(setup, site_before_test):
     assert badge_verification == 6
 
 #teste 3 clicar no carro e verificar que entrou no carro
-def test_click_on_cart(setup, site_before_test):
+def mtest_click_on_cart(setup, site_before_test):
     '''Esta função testa o carrinho de compras'''
     site = site_before_test
 
@@ -144,7 +152,7 @@ def test_click_on_cart(setup, site_before_test):
 
 #teste 4 adicionar 6 elementos, remover elemento e verificar que ficaram 5 elementos no carro
 
-def test_remove_element(setup, site_before_test):
+def mtest_remove_element(setup, site_before_test):
     '''Esta função abre o site,adicionar 6 elementos, remove 1 e verifica'''
 
     site = site_before_test
@@ -158,7 +166,7 @@ def test_remove_element(setup, site_before_test):
     
 #Teste Final 5, todos os passos anteriores+checkout+finish
 
-def test_all_cicle(setup, site_before_test):
+def mtest_all_cicle(setup, site_before_test):
     '''Faz todo o circuito, login+adição de 6 elementos+remoção de 1+ checkout+finish e testa'''
     site = site_before_test
 
@@ -183,26 +191,25 @@ def test_all_cicle(setup, site_before_test):
 # Fluxo 2 - Fazer login
     
 #Teste para verificar o login e logout    
-def test_login_logout(setup):
+def mtest_login_logout(setup):
     '''Esta função faz login e logout e verifica o funcionamento dos mesmos ao ver o botão de login'''
     site = open_site()
     login(site, 'problem_user', 'secret_sauce')
 
-    sleep(1)
 
     logout(site)
 
-    #Foi necessário colocar sleep no logout pois sem o mesmo o teste falhava, pela rapidez
-    #e pelo facto da página não responder rápido o suficiente
+    #Substitui os sleeps deste fluxo por um implicity wait no inicio, por causa da demora de
+    #carregamento do logout
 
-    sleep(1)
+    
 
     login_el = site.find_element(By.ID, 'login-button')
     assert 'Login' == login_el.get_attribute('value')
 
 #Fluxo 3 - Fazer login com um utilizador que dá erro
     
-def test_error(setup):
+def mtest_error(setup):
     '''Esta função abre e faz login com um utilizador que dá erro e verifica a mensagem de erro'''
     site = open_site()
     login(site, 'locked_out_user', 'secret_sauce')
@@ -214,7 +221,7 @@ def test_error(setup):
 
 
 #Fluxo 4 - Fazer login, adicionar um item ao carro e fazer reset
-def test_fluxo4(setup, site_before_test):
+def mtest_fluxo4(setup, site_before_test):
     
     site = site_before_test
 
@@ -230,7 +237,7 @@ def test_fluxo4(setup, site_before_test):
 #Fluxo 5- Verificar o tempo de login num utilizador de performance. 
 #Este user demora cerca de 6 segundos, pelo que o teste deverá falhar
     
-def test_login_time(setup):
+def mtest_login_time(setup):
     
     site = open_site()
 
