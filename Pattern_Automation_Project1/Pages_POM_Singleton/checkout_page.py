@@ -8,7 +8,7 @@ class CheckoutPage(BasePage):
     CONTINUE_BUTTON = (By.ID, 'continue')
    
     def fill_form_and_checkout(self, firstname, lastname, zipcode):
-        self.driver.find_element(*self.NAME).send_keys(firstname)
+        self.wait_for_element(self.NAME).send_keys(firstname)
         self.driver.find_element(*self.LAST_NAME).send_keys(lastname)
         self.driver.find_element(*self.ZIP_CODE).send_keys(zipcode)
         self.driver.find_element(*self.CONTINUE_BUTTON).click()

@@ -20,15 +20,15 @@ class ProductPage(BasePage):
                 break
 
     def remove_item(self):
-        remove = self.driver.find_element(*self.SPECIFIC_BUTTON)
+        remove = self.wait_for_element(self.SPECIFIC_BUTTON)
         remove.click()
 
     def click_cart(self):
-        cart_badge = self.driver.find_element(*self.CART_BADGE)
+        cart_badge = self.wait_for_element(self.CART_BADGE)
         cart_badge.click()
 
     def logout(self):
-        tree_line_el = self.driver.find_element(*self.TREE_LINE_MENU)
+        tree_line_el = self.wait_for_element(self.TREE_LINE_MENU)
         tree_line_el.click()
 
         logout_el = self.driver.find_element(*self.LOGOUT_BUTTON)

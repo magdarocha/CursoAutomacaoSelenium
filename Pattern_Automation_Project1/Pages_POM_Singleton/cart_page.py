@@ -6,5 +6,5 @@ class CartPage(BasePage):
     CART_BADGE = (By.CLASS_NAME, 'shopping_cart_badge')
    
     def click_checkout(self):
-        button_checkout = self.driver.find_element(*self.CHECKOUT)
+        button_checkout = self.wait_for_element(self.CHECKOUT)
         button_checkout.click()

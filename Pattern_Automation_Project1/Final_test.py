@@ -7,24 +7,24 @@ from Pages_POM_Singleton.cart_page import CartPage
 from Pages_POM_Singleton.overview_page import OverviewPage
 from Pages_POM_Singleton.checkout_page import CheckoutPage
 from selenium.webdriver.common.by import By
+from Singleton import WebDriverSingleton
 from time import time 
 
 @pytest.fixture()
 def site_before_test():
     print("Begin Test")
-
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.implicitly_wait(2)
-
+    driver = WebDriverSingleton.get_instance()
     BasePage(driver).go_to_site()
-
     yield driver
     print("End Test")
-    driver.quit()
+
+@pytest.fixture(scope="session", autouse=True)
+def close_browser():
+    yield
+    WebDriverSingleton.quit_instance()
 
 # Fluxo 1
-def mtest_all_cicle(site_before_test):
+def test_all_cicle(site_before_test):
     driver = site_before_test
 
     # login
@@ -71,7 +71,7 @@ def mtest_all_cicle(site_before_test):
     assert 'Thank you for your order!' == thank_you.text
 
 #Fluxo 2
-def mtest_login_and_logout(site_before_test):    
+def test_login_and_logout(site_before_test):    
     driver = site_before_test
 
     # login
@@ -90,7 +90,7 @@ def mtest_login_and_logout(site_before_test):
     assert 'Login' == login_el.get_attribute('value')
 
 # Fluxo 3
-def mtest_error(site_before_test):
+def test_error(site_before_test):
     driver = site_before_test
 
     login_page = LoginPage(driver)
@@ -100,7 +100,7 @@ def mtest_error(site_before_test):
     assert 'Epic sadface: Sorry, this user has been locked out.' == message_error_el.text
 
 # Fluxo 4
-def mtest_fluxo4(site_before_test):
+def test_fluxo4(site_before_test):
     
     driver = site_before_test
 
