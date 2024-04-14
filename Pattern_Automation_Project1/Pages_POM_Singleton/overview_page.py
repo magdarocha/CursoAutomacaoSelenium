@@ -1,9 +1,8 @@
-from selenium.webdriver.common.by import By
+from seleniumpagefactory.Pagefactory import PageFactory
 from Pages_POM_Singleton.base_page import BasePage
 
-class OverviewPage(BasePage):
-    FINISH_BUTTON = (By.ID, 'finish')
-    
+class OverviewPage(BasePage, PageFactory):
+    locators = {'finish_button':('ID','finish')}
 
     def click_finish(self):
-        self.wait_for_element(self.FINISH_BUTTON).click()
+        self.finish_button.click_button()

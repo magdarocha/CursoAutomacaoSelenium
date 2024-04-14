@@ -1,14 +1,15 @@
-from selenium.webdriver.common.by import By
+from seleniumpagefactory.Pagefactory import PageFactory
 from Pages_POM_Singleton.base_page import BasePage
 
-class CheckoutPage(BasePage):
-    NAME = (By.CSS_SELECTOR, 'div input:first-child')
-    LAST_NAME = (By.CSS_SELECTOR, 'form div div:nth-child(2) input:first-child')
-    ZIP_CODE = (By.XPATH, '//form/div/div[3]/input')
-    CONTINUE_BUTTON = (By.ID, 'continue')
+class CheckoutPage(BasePage, PageFactory):
+    locators = {'name':('CSS','div input:first-child'), 
+                'last_name':('CSS','form div div:nth-child(2) input:first-child'), 
+                'zip_code':('XPATH','//form/div/div[3]/input'),
+                'continue_button': ('ID', 'continue')}
    
     def fill_form_and_checkout(self, firstname, lastname, zipcode):
-        self.wait_for_element(self.NAME).send_keys(firstname)
-        self.driver.find_element(*self.LAST_NAME).send_keys(lastname)
-        self.driver.find_element(*self.ZIP_CODE).send_keys(zipcode)
-        self.driver.find_element(*self.CONTINUE_BUTTON).click()
+        self.name.set_text(firstname)
+        self.last_name.set_text(lastname)
+        self.zip_code.set_text(zipcode)
+        self.continue_button.click_button()
+        

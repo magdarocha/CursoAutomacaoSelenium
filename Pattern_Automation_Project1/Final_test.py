@@ -1,5 +1,4 @@
 import pytest
-from selenium import webdriver
 from Pages_POM_Singleton.base_page import BasePage
 from Pages_POM_Singleton.first_page import LoginPage
 from Pages_POM_Singleton.second_page import ProductPage
@@ -7,7 +6,7 @@ from Pages_POM_Singleton.cart_page import CartPage
 from Pages_POM_Singleton.overview_page import OverviewPage
 from Pages_POM_Singleton.checkout_page import CheckoutPage
 from selenium.webdriver.common.by import By
-from Singleton import WebDriverSingleton
+from Singleton.Singleton import WebDriverSingleton
 from time import time 
 
 @pytest.fixture()
