@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "Pattern_Automation_Project1"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

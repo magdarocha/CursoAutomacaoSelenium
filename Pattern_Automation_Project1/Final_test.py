@@ -7,7 +7,12 @@ from Pages_POM_Singleton.overview_page import OverviewPage
 from Pages_POM_Singleton.checkout_page import CheckoutPage
 from selenium.webdriver.common.by import By
 from Singleton.Singleton import WebDriverSingleton
-from time import time 
+from time import time, sleep
+import csv
+import os
+
+file_csv = os.path.dirname(os.path.realpath(__file__))
+csv_file_path = file_csv + "\\users.csv"
 
 @pytest.fixture()
 def site_before_test():
@@ -73,20 +78,31 @@ def test_all_cicle(site_before_test):
 def test_login_and_logout(site_before_test):    
     driver = site_before_test
 
-    # login
-    login_page = LoginPage(driver)
-    login_page.login('problem_user', 'secret_sauce')
+    with open(csv_file_path, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)
+        login_page = LoginPage(driver)
+        for user, password, expect in reader:
 
-    products_el = driver.find_element(By.CLASS_NAME, 'title')
+            # login
+            login_page.clear_login()
+            login_page.login(user, password)
 
-    #Verifico se o elemento está na página e se é visivel
-    assert 'Products' == products_el.text and products_el.is_displayed()
+            #Verifico se o elemento está na página e se é visivel
+            if expect == 'pass':
+                sleep(7)
+                products_el = driver.find_element(By.CLASS_NAME, 'title')
+                assert 'Products' == products_el.text and products_el.is_displayed()
 
-    logout_page = ProductPage(driver)
-    logout_page.logout()
+                logout_page = ProductPage(driver)
+                logout_page.logout()
 
-    login_el = driver.find_element(By.ID, 'login-button')
-    assert 'Login' == login_el.get_attribute('value')
+                login_el = driver.find_element(By.ID, 'login-button')
+                assert 'Login' == login_el.get_attribute('value')
+            else:
+                login_el = driver.find_element(By.ID, 'login-button')
+                assert 'Login' == login_el.get_attribute('value')
+                
 
 # Fluxo 3
 def test_error(site_before_test):

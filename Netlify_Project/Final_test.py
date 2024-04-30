@@ -38,7 +38,7 @@ def test_git_hub(site_before_test):
 # Abrir um user git hub, obter o link do user e verificar 
 #se é um site válido ou não, usar a biblioteca requests
 
-def atest_git_hub_002(site_before_test):
+def test_git_hub_002(site_before_test):
     driver = site_before_test
 
     name = 'magdarocha'
