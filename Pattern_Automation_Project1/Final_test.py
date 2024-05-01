@@ -12,7 +12,7 @@ import csv
 import os
 
 file_csv = os.path.dirname(os.path.realpath(__file__))
-csv_file_path = file_csv + "\\users.csv"
+csv_file_path = os.path.join(file_csv, "users.csv")
 
 @pytest.fixture()
 def site_before_test():
@@ -75,7 +75,7 @@ def test_all_cicle(site_before_test):
     assert 'Thank you for your order!' == thank_you.text
 
 #Fluxo 2
-def test_login_and_logout(site_before_test):    
+def test_login_and_logout(site_before_test):
     driver = site_before_test
 
     with open(csv_file_path, newline='') as csvfile:
@@ -83,14 +83,12 @@ def test_login_and_logout(site_before_test):
         next(reader)
         login_page = LoginPage(driver)
         for user, password, expect in reader:
-
             # login
             login_page.clear_login()
             login_page.login(user, password)
 
             #Verifico se o elemento está na página e se é visivel
             if expect == 'pass':
-                sleep(7)
                 products_el = driver.find_element(By.CLASS_NAME, 'title')
                 assert 'Products' == products_el.text and products_el.is_displayed()
 
@@ -102,7 +100,6 @@ def test_login_and_logout(site_before_test):
             else:
                 login_el = driver.find_element(By.ID, 'login-button')
                 assert 'Login' == login_el.get_attribute('value')
-                
 
 # Fluxo 3
 def test_error(site_before_test):
@@ -116,7 +113,6 @@ def test_error(site_before_test):
 
 # Fluxo 4
 def test_fluxo4(site_before_test):
-    
     driver = site_before_test
 
     login_page = LoginPage(driver)
@@ -143,14 +139,13 @@ def test_fluxo4(site_before_test):
 
 # Fluxo 5 (orientado ao erro)
 def test_login_time(site_before_test):
-    
     driver = site_before_test
 
     initial_time = time()
 
     login_page = LoginPage(driver)
     login_page.login('performance_glitch_user', 'secret_sauce')
-    
+
     products_el = driver.find_element(By.CLASS_NAME, 'title')
     assert 'Products' == products_el.text
 

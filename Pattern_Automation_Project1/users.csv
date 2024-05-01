@@ -1,7 +1,7 @@
 User,password,expect
 standard_user,secret_sauce,pass
 locked_out_user,secret_sauce,fail
-problem_user,secret_sauce,fail
+problem_user,secret_sauce,pass
 performance_glitch_user,secret_sauce,pass
-error_user,secret_sauce,fail
+error_user,secret_sauce,pass
 visual_user,secret_sauce,pass
