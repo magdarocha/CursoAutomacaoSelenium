@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu May 23 21:27:21 WEST 2024","Thu May 23 21:27:24 WEST 2024","3295","","Final_test","","","","test_search_product",""
+"passed","Thu May 23 21:27:29 WEST 2024","Thu May 23 21:27:33 WEST 2024","4374","","Final_test","","","","test_search_brand_product",""
+"passed","Thu May 23 21:27:38 WEST 2024","Thu May 23 21:27:43 WEST 2024","4461","","Final_test","","","","test_availability_product","Teste 1
+    "
